@@ -1,11 +1,58 @@
 import SerialPort from 'serialport'
-import readline from 'readline'
+const port = new SerialPort('COM13', { baudRate: 9600 })
+const parser = port.pipe(new SerialPort.parsers.ByteLength({length: 5}))
+
 // tty.usbserial-AD0K1FF9
 /// dev/tty.usbserial-AD0K1DTS
-const serial = new SerialPort('/dev/tty.usbserial-AD0K1FF9', {baudRate: 9800})
+
+
+// Read messages like: 0C 03 0E 01 00 12 0D
+// 0C is a sync characters
+// 03 is an address
+// 0E is an address
+// 01 is the type of message
+// 00 is the length of the payload
+// 12 is the checksum of (03 0E 01 00)
+// All messages are 7 bytes + whatever the size of the payload is.
+// Payload size is in the 5th bytes of any message
+
+
 // Example payload
 //  1  2  3  4  5  6  7  8  9
 // FF FF F1 01 84 00 00 01 48
+port.write("t")
+setInterval(() => {
+     port.write("w");
+}, 2000)
+setInterval(() => {
+     port.write("t");
+}, 2500)
+function showPortOpen() {
+     console.log('port open. Data rate: ' + port.baudRate);
+     port.write(Buffer.from("0x0C030E0100120D","hex"))
+     port.write("o")
+}
+
+   function readSerialData(data: any) {
+     console.log(data);
+   }
+
+   function showPortClose() {
+     console.log('port closed.');
+   }
+
+   function showError(error: string) {
+     console.log('Serial port error: ' + error);
+   }
+port.on('open', showPortOpen);
+parser.on('data', readSerialData);
+port.on('close', showPortClose);
+port.on('error', showError);
+port.write("henlo")
+port.write("henlo")
+port.write("henlo")
+port.write("henlo")
+
 const Actions =  {
      lock: 0x30,
      unlock: 0x31,
@@ -74,9 +121,5 @@ const lastStatusUpdate = 0;
 // const  write = (number:  msg) => {
 
 // }
+console.log("hi");
 
-const stream = serial.pipe(process.stdout);
-serial.on('readable', () => console.log('Data:', serial.read()))
-
-serial.on('data',  (data) => console.log('Data:', data))
-serial.write(Buffer.from("0xbada55"))
