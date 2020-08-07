@@ -1,9 +1,8 @@
-const SerialPort = require('serialport');
-const readline = require('readline');
-//tty.usbserial-AD0K1FF9
-///dev/tty.usbserial-AD0K1DTS
-const serial = new SerialPort('/dev/tty.usbserial-AD0K1FF9', {BaudRate: 9800})
-serial.BaudRate =  9800;
+import SerialPort from 'serialport'
+import readline from 'readline'
+// tty.usbserial-AD0K1FF9
+/// dev/tty.usbserial-AD0K1DTS
+const serial = new SerialPort('/dev/tty.usbserial-AD0K1FF9', {baudRate: 9800})
 // Example payload
 //  1  2  3  4  5  6  7  8  9
 // FF FF F1 01 84 00 00 01 48
@@ -29,29 +28,29 @@ const HardwareStatus  = {
      led_off: 0x02,
      status_update: 0xB8,
      led_flashing: 0x04,
-     remote_pairing: 0xBF  
+     remote_pairing: 0xBF
 }
 
 class FortinStatus {
-     valetMode:boolean;
-     remoteStarted:boolean;
-     engineTurningOver:boolean;
-     accessoryMode:boolean;
-     unknownFlag1:boolean;
-     trunkOpen:boolean;
-     doorOpen:boolean;
-     armed:boolean;
-     remoteAddress:number;
-     address:number;
-     counterType:number;
-     counter:number;
+     valetMode:boolean = false;
+     remoteStarted:boolean = false;
+     engineTurningOver:boolean = false;
+     accessoryMode:boolean = false;
+     unknownFlag1:boolean = false;
+     trunkOpen:boolean = false;
+     doorOpen:boolean = false;
+     armed:boolean = false;
+     remoteAddress:number= 0x00;
+     address:number = 0x00;
+     counterType:number = 0x00;
+     counter:number = 0;
      /* the time in ms until the remote starter shuts  off */
-     shutoffCounter: number;
+     shutoffCounter: number = 0;
      constructor(){
-          this.counter  = 0;
+               // todo
      }
      update() {
-          
+          // todo
      }
 }
 // When this is true we will try to clone an existing
@@ -70,17 +69,14 @@ const remoteAddress = [0xDE, 0xAD, 0x01];
 /* The time in ms since the last status update. */
 const lastStatusUpdate = 0;
 /**
- * @param  message - Message to send in hex 
+ * @param  message - Message to send in hex
  */
 // const  write = (number:  msg) => {
-    
-// }
-const stream = serial.pipe(new Readline());
-serial.on('readable', function () {
-     console.log('Data:', serial.read())
-   })
 
-serial.on('data', function (data) {
-     console.log('Data:', data)
-   })
+// }
+
+const stream = serial.pipe(process.stdout);
+serial.on('readable', () => console.log('Data:', serial.read()))
+
+serial.on('data',  (data) => console.log('Data:', data))
 serial.write(Buffer.from("0xbada55"))
