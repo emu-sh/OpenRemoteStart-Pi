@@ -1,12 +1,20 @@
 import SerialPort from 'serialport';
 const port = new SerialPort('COM13', { baudRate: 9600 })
-const parser = port.pipe(new SerialPort.parsers.ByteLength({length: 5}))
+const parser = port.pipe(new SerialPort.parsers.Delimiter({delimiter:"0D",includeDelimiter:true}))
 
 // https://emu.bz/Kzf
 
 // tty.usbserial-AD0K1FF9
 /// dev/tty.usbserial-AD0K1DTS
 
+const protocol = `
+Start Sentinel
+ | Direction
+ |  |\  Command   Payload
+ |  | \   | Length /|\   Checksum
+ |  |  \  |   |   / | \    |  End Sentinel
+0C 0E 03 32 03  FF FF F1  35  0D
+`;
 
 // Read messages like: 0C 03 0E 01 00 12 0D
 // 0C is a sync characters
