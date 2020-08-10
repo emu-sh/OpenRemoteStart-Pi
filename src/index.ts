@@ -1,6 +1,8 @@
-import SerialPort from 'serialport'
+import SerialPort from 'serialport';
 const port = new SerialPort('COM13', { baudRate: 9600 })
 const parser = port.pipe(new SerialPort.parsers.ByteLength({length: 5}))
+
+// https://emu.bz/Kzf
 
 // tty.usbserial-AD0K1FF9
 /// dev/tty.usbserial-AD0K1DTS
@@ -23,25 +25,30 @@ const parser = port.pipe(new SerialPort.parsers.ByteLength({length: 5}))
 port.write("t")
 setInterval(() => {
      port.write("w");
+     console.log("sent w")
 }, 2000)
 setInterval(() => {
      port.write("t");
+     console.log("sent t")
 }, 2500)
+function buf2hex(buffer: Buffer) { // buffer is an ArrayBuffer
+     return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).toUpperCase().slice(-2)).join(' ');
+   }
 function showPortOpen() {
      console.log('port open. Data rate: ' + port.baudRate);
      port.write(Buffer.from("0x0C030E0100120D","hex"))
      port.write("o")
 }
 
-   function readSerialData(data: any) {
-     console.log(data);
+   function readSerialData(data: Buffer) {
+        console.log(buf2hex(data) + ' ' + data.toString());
    }
 
    function showPortClose() {
      console.log('port closed.');
    }
 
-   function showError(error: string) {
+   function showError(error:string) {
      console.log('Serial port error: ' + error);
    }
 port.on('open', showPortOpen);

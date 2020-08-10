@@ -10,7 +10,7 @@
       "outDir": "dist",
       "allowJs": true,
       "strict": true,
-      "isolatedModules": true,
+
       "allowSyntheticDefaultImports": true,
       "esModuleInterop": true,
       "declaration": true,

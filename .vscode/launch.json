@@ -15,7 +15,11 @@
             "program": "${workspaceFolder}\\dist\\lib\\index.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
-            ]
+            ],
+            "sourceMaps": true,
+            "trace": "all",
+            "preLaunchTask": "npm: build"
+            
         }
     ]
 }
