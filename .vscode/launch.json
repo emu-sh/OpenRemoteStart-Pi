@@ -12,13 +12,12 @@
                 "<node_internals>/**"
             ],
             "args": ["--experimental-modules"],
-            "program": "${workspaceFolder}\\dist\\lib\\index.js",
+            "program": "${workspaceFolder}/src/index.ts",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ],
             "sourceMaps": true,
-            "trace": "all",
-            "preLaunchTask": "npm: build"
+            "trace": "all"
             
         }
     ]
