@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "baseUrl": ".",
+      "esModuleInterop": true,
+      "module": "esnext",
+		  "moduleResolution": "node",
+      "noImplicitAny": false,
+      "outDir": "build",
+      "paths": {
+        "*": ["node_modules/*", "src/types/*"]
+      },
+      "sourceMap": true,
+      "target": "es6"
+    },
+    "include": ["src/**/*"]
+  }
